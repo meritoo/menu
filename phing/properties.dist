@@ -1,0 +1,89 @@
+# --------------------------------------------------------------------------------
+# Common, e.g. default environment
+# --------------------------------------------------------------------------------
+
+# Default environment
+#
+env = dev
+
+# Clear cache with the "warmup" option
+#
+# The cache:clear command should always be called with the --no-warmup option. Warmup should be done via the cache:warmup command.
+# https://github.com/symfony/symfony/blob/master/UPGRADE-3.3.md#frameworkbundle
+#
+# Meritoo <github@meritoo.pl>
+# 2017-06-06
+#
+cache.clearWithWarmup = false
+
+# --------------------------------------------------------------------------------
+# Composer
+# --------------------------------------------------------------------------------
+
+# Command used to download Composer
+#
+composer.download_command = bash ${project.basedir}/phing/composer-install.sh
+
+# Path to Composer executable or downloaded composer.phar file
+#
+composer.path = ${project.basedir}/composer.phar
+
+# Path to PHP executable used by Composer
+#
+composer.php = php
+
+# --------------------------------------------------------------------------------
+# Directories
+# --------------------------------------------------------------------------------
+
+# System directories
+#
+dir.src = ${project.basedir}/src
+dir.data = ${project.basedir}/data
+dir.tests = ${project.basedir}/tests
+
+# Build directories
+#
+dir.build = ${project.basedir}/build
+dir.reports = ${dir.build}/reports
+dir.reports.coverage = ${dir.reports}/phpunit-coverage
+
+# Data directories
+#
+dir.data.tests = ${dir.data}/tests
+dir.data.temporary = ${dir.data}/tmp
+
+# Docker directories
+#
+dir.docker = ${project.basedir}/docker
+dir.docker.data = ${dir.docker}/data/db
+dir.docker.logs = ${dir.docker}/logs/nginx
+
+# --------------------------------------------------------------------------------
+# Static Analysis
+# --------------------------------------------------------------------------------
+
+# Paths of frameworks used to run analysis:
+# - PHPStan
+#
+check.phpstan.command = ./vendor/bin/phpstan analyse
+check.php_coveralls.command = ./vendor/bin/php-coveralls --ansi -v
+
+# --------------------------------------------------------------------------------
+# Testing
+# --------------------------------------------------------------------------------
+
+# Path of the PHP Coding Standards Fixer (http://cs.sensiolabs.org)
+#
+tests.cs_fixer.command = ./vendor/bin/php-cs-fixer fix --verbose
+
+# Test database path
+#
+tests.database = ${dir.data.temporary}/database.sqlite
+
+# Paths of frameworks used to run tests:
+# - PHPUnit (unit tests)
+# - Infection (mutation tests)
+#
+tests.phpunit.command = ./vendor/bin/phpunit --verbose
+tests.mutation.command = ./vendor/bin/infection --ansi --threads=5 --coverage=build/reports/infection
