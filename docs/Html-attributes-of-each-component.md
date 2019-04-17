@@ -73,11 +73,11 @@ echo $menu->render($templates);
 
 ```html
 <div id="left-navigation" data-show="true" class="blue-box">
-	<div class="first-item">
-    	<a href="/" id="home">Home</a>
+    <div class="first-item">
+        <a href="/" id="home">Home</a>
     </div>
     <div class="second-item">
-    	<a href="/contact" id="contact">Contact</a>
+        <a href="/contact" id="contact">Contact</a>
     </div>
 </div>
 ```
@@ -104,31 +104,31 @@ $item = Item::create('Home', '/', $linkAttributes, $itemAttributes);
 
 ```
 $links = [
-	[
-    	// Name of link
-		'Home',
+    [
+        // Name of link
+        'Home',
 
-		// Url of link
-    	'/',
+        // Url of link
+        '/',
 
-		// Attributes of link
+        // Attributes of link
         [
-        	'id' => 'home',
+            'id' => 'home',
         ],
 
         // Attributes of item
         [
-        	Attributes::ATTRIBUTE_CSS_CLASS => 'first-item',
+            Attributes::ATTRIBUTE_CSS_CLASS => 'first-item',
         ],
     ],
-	[
-		'Contact',
-    	'/contact',
+    [
+        'Contact',
+        '/contact',
         [
-        	'id' => 'contact'
+            'id' => 'contact'
         ],
         [
-        	Attributes::ATTRIBUTE_CSS_CLASS => 'second-item'
+            Attributes::ATTRIBUTE_CSS_CLASS => 'second-item'
         ],
     ],
 ];
@@ -156,11 +156,11 @@ echo $menu->render($templates);
 
 ```html
 <div id="left-navigation" data-show="true" class="blue-box">
-	<div class="first-item">
-    	<a href="/" id="home">Home</a>
+    <div class="first-item">
+        <a href="/" id="home">Home</a>
     </div>
     <div class="second-item">
-    	<a href="/contact" id="contact">Contact</a>
+        <a href="/contact" id="contact">Contact</a>
     </div>
 </div>
 ```

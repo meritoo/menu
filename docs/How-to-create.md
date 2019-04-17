@@ -44,11 +44,11 @@ echo $menu->render($templates);
 
 ```html
 <div class="container">
-	<div class="item">
-    	<a href="/">Home</a>
+    <div class="item">
+        <a href="/">Home</a>
     </div>
     <div class="item">
-    	<a href="/contact">Contact</a>
+        <a href="/contact">Contact</a>
     </div>
 </div>
 ```
@@ -92,11 +92,11 @@ echo $menu->render($templates);
 
 ```html
 <div class="container">
-	<div class="item">
-    	<a href="/">Home</a>
-    </div>
     <div class="item">
-    	<a href="/contact">Contact</a>
+        <a href="/">Home</a>
+        </div>
+    <div class="item">
+        <a href="/contact">Contact</a>
     </div>
 </div>
 ```
