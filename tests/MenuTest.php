@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Meritoo\Test\Menu;
 
+use Generator;
 use Meritoo\Common\Collection\Templates;
 use Meritoo\Common\Exception\ValueObject\Template\TemplateNotFoundException;
 use Meritoo\Common\Test\Base\BaseTestCase;
@@ -20,6 +21,7 @@ use Meritoo\Menu\Html\Attributes;
 use Meritoo\Menu\Item;
 use Meritoo\Menu\Link;
 use Meritoo\Menu\Menu;
+use stdClass;
 
 /**
  * Test case for the menu
@@ -136,7 +138,7 @@ class MenuTest extends BaseTestCase
         static::assertEquals($expected, $existing);
     }
 
-    public function provideIncompleteTemplates(): ?\Generator
+    public function provideIncompleteTemplates(): ?Generator
     {
         $template = 'Template with \'%s\' index was not found. Did you provide all required templates?';
 
@@ -162,9 +164,9 @@ class MenuTest extends BaseTestCase
 
         yield[
             new Templates([
-                Link::class      => new Template('<a href="%url%">%name%</a>'),
-                Item::class      => new Template('<div class="item">%link%</div>'),
-                \stdClass::class => new Template('<div class="container">%items%</div>'),
+                Link::class     => new Template('<a href="%url%">%name%</a>'),
+                Item::class     => new Template('<div class="item">%link%</div>'),
+                stdClass::class => new Template('<div class="container">%items%</div>'),
             ]),
             sprintf($template, Menu::class),
         ];
@@ -201,7 +203,7 @@ class MenuTest extends BaseTestCase
         static::assertEquals($expected, Menu::create($links, $menuAttributes), $description);
     }
 
-    public function provideTemplatesAndMenuToRender(): ?\Generator
+    public function provideTemplatesAndMenuToRender(): ?Generator
     {
         $items = [
             new Item(new Link('Test 1', '/test1')),
@@ -294,7 +296,7 @@ class MenuTest extends BaseTestCase
         ];
     }
 
-    public function provideItemsToCreate(): ?\Generator
+    public function provideItemsToCreate(): ?Generator
     {
         yield[
             'An empty array',
@@ -370,7 +372,7 @@ class MenuTest extends BaseTestCase
         ];
     }
 
-    public function provideItemsToCreateWithAttributes(): ?\Generator
+    public function provideItemsToCreateWithAttributes(): ?Generator
     {
         $link1Attributes = [
             'id'                            => 'test',

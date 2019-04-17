@@ -84,18 +84,6 @@ class Menu extends BaseMenuPart
     /**
      * {@inheritdoc}
      */
-    protected function prepareTemplateValues(Templates $templates): array
-    {
-        $rendered = $this->renderItems($templates);
-
-        return [
-            'items' => $rendered,
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function render(Templates $templates): string
     {
         // Menu without items?
@@ -111,6 +99,18 @@ class Menu extends BaseMenuPart
         }
 
         return parent::render($templates);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function prepareTemplateValues(Templates $templates): array
+    {
+        $rendered = $this->renderItems($templates);
+
+        return [
+            'items' => $rendered,
+        ];
     }
 
     /**

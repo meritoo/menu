@@ -77,18 +77,6 @@ class Item extends BaseMenuPart
     /**
      * {@inheritdoc}
      */
-    protected function prepareTemplateValues(Templates $templates): array
-    {
-        $linkRendered = $this->renderLink($templates);
-
-        return [
-            'link' => $linkRendered,
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function render(Templates $templates): string
     {
         $linkRendered = $this->renderLink($templates);
@@ -99,6 +87,18 @@ class Item extends BaseMenuPart
         }
 
         return parent::render($templates);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function prepareTemplateValues(Templates $templates): array
+    {
+        $linkRendered = $this->renderLink($templates);
+
+        return [
+            'link' => $linkRendered,
+        ];
     }
 
     /**
