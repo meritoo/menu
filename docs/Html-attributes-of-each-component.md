@@ -4,6 +4,8 @@ Build navigation easily, without any efforts. Library that provides tools to bui
 
 # HTML attributes of each component
 
+Based on `Meritoo\Common\ValueObject\Template` class from [meritoo/common-library](https://github.com/meritoo/common-library) package. [See more](https://github.com/meritoo/common-library/blob/master/docs/Value-Objects.md#template).
+
 ### Add 1 attribute
 
 Call `addAttribute()` method of component:
