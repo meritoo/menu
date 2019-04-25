@@ -18,8 +18,8 @@ use Meritoo\Common\Type\OopVisibilityType;
 use Meritoo\Common\Utilities\Reflection;
 use Meritoo\Common\ValueObject\Template;
 use Meritoo\Menu\Html\Attributes;
-use Meritoo\Menu\Item;
 use Meritoo\Menu\Link;
+use Meritoo\Menu\LinkContainer;
 use stdClass;
 
 /**
@@ -142,7 +142,7 @@ class LinkTest extends BaseTestCase
 
         yield[
             new Templates([
-                Item::class => new Template('<div class="item">%link%</div>'),
+                LinkContainer::class => new Template('<div class="wrapper">%link%</div>'),
             ]),
             sprintf($template, Link::class),
         ];

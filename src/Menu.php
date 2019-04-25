@@ -14,7 +14,7 @@ use Meritoo\Common\Collection\Templates;
 use Meritoo\Menu\Base\BaseMenuPart;
 
 /**
- * Menu. Contains items.
+ * Menu. Has containers with links.
  *
  * @author    Meritoo <github@meritoo.pl>
  * @copyright Meritoo <http://www.meritoo.pl>
@@ -22,34 +22,34 @@ use Meritoo\Menu\Base\BaseMenuPart;
 class Menu extends BaseMenuPart
 {
     /**
-     * Menu's items
+     * Containers with links
      *
-     * @var Item[]
+     * @var LinkContainer[]
      */
-    private $items;
+    private $linksContainers;
 
     /**
-     * Rendered and prepared to display menu's items
+     * Rendered and prepared to display links' containers
      *
      * @var string
      */
-    private $itemsRendered;
+    private $linksContainersRendered;
 
     /**
      * Class constructor
      *
-     * @param Item[] $items Menu's items
+     * @param LinkContainer[] $linksContainers Containers with links
      */
-    public function __construct(array $items)
+    public function __construct(array $linksContainers)
     {
-        $this->items = $items;
+        $this->linksContainers = $linksContainers;
     }
 
     /**
      * Creates new menu
      *
      * @param array      $links          An array of arrays (0-based indexes): [0] name of link, [1] url of link, [2]
-     *                                   (optional) attributes of link, [3] (optional) attributes of item
+     *                                   (optional) attributes of link, [3] (optional) attributes of link's container
      * @param null|array $menuAttributes (optional) Attributes of the main container. It's an array of key-value pairs,
      *                                   where key - attribute, value - value of attribute
      * @return null|Menu
@@ -60,19 +60,19 @@ class Menu extends BaseMenuPart
             return null;
         }
 
-        $items = [];
+        $linksContainers = [];
 
         foreach ($links as $link) {
             $name = $link[0] ?? '';
             $url = $link[1] ?? '';
 
             $linkAttributes = $link[2] ?? null;
-            $itemAttributes = $link[3] ?? null;
+            $containerAttributes = $link[3] ?? null;
 
-            $items[] = Item::create($name, $url, $linkAttributes, $itemAttributes);
+            $linksContainers[] = LinkContainer::create($name, $url, $linkAttributes, $containerAttributes);
         }
 
-        $menu = new static($items);
+        $menu = new static($linksContainers);
 
         if (null !== $menuAttributes) {
             $menu->addAttributes($menuAttributes);
@@ -86,14 +86,14 @@ class Menu extends BaseMenuPart
      */
     public function render(Templates $templates): string
     {
-        // Menu without items?
-        if (empty($this->items)) {
+        // Nothing to do, because menu is empty
+        if (empty($this->linksContainers)) {
             return '';
         }
 
-        $rendered = $this->renderItems($templates);
+        $rendered = $this->renderLinksContainers($templates);
 
-        // Items are rendered, but menu is empty?
+        // Nothing to do, because menu is empty
         if ('' === $rendered) {
             return '';
         }
@@ -106,34 +106,34 @@ class Menu extends BaseMenuPart
      */
     protected function prepareTemplateValues(Templates $templates): array
     {
-        $rendered = $this->renderItems($templates);
+        $rendered = $this->renderLinksContainers($templates);
 
         return [
-            'items' => $rendered,
+            'linksContainers' => $rendered,
         ];
     }
 
     /**
-     * Renders menu's items
+     * Renders containers with links
      *
      * @param Templates $templates Collection/storage of templates that will be required while rendering this and
      *                             related objects, e.g. children of this object
      * @return string
      */
-    private function renderItems(Templates $templates): string
+    private function renderLinksContainers(Templates $templates): string
     {
-        if (null === $this->itemsRendered) {
-            $this->itemsRendered = '';
+        if (null === $this->linksContainersRendered) {
+            $this->linksContainersRendered = '';
 
-            if (!empty($this->items)) {
-                foreach ($this->items as $item) {
-                    $this->itemsRendered .= $item->render($templates);
+            if (!empty($this->linksContainers)) {
+                foreach ($this->linksContainers as $linkContainer) {
+                    $this->linksContainersRendered .= $linkContainer->render($templates);
                 }
 
-                $this->itemsRendered = trim($this->itemsRendered);
+                $this->linksContainersRendered = trim($this->linksContainersRendered);
             }
         }
 
-        return $this->itemsRendered;
+        return $this->linksContainersRendered;
     }
 }

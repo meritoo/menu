@@ -21,7 +21,7 @@ use Meritoo\Test\Menu\Base\BaseMenuPart\MyFirstMenuPart;
 use Meritoo\Test\Menu\Base\BaseMenuPart\MySecondMenuPart;
 
 /**
- * Test case for the part of menu, e.g. link, item
+ * Test case for the part of menu, e.g. link, link\'s container
  *
  * @author    Meritoo <github@meritoo.pl>
  * @copyright Meritoo <http://www.meritoo.pl>

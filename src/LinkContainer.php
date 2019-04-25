@@ -14,22 +14,22 @@ use Meritoo\Common\Collection\Templates;
 use Meritoo\Menu\Base\BaseMenuPart;
 
 /**
- * Item of menu (container for a link)
+ * Container for a link
  *
  * @author    Meritoo <github@meritoo.pl>
  * @copyright Meritoo <http://www.meritoo.pl>
  */
-class Item extends BaseMenuPart
+class LinkContainer extends BaseMenuPart
 {
     /**
-     * Item's link
+     * Container's link
      *
      * @var Link
      */
     private $link;
 
     /**
-     * Rendered and prepared to display item's link
+     * Rendered and prepared to display container's link
      *
      * @var string
      */
@@ -38,7 +38,7 @@ class Item extends BaseMenuPart
     /**
      * Class constructor
      *
-     * @param Link $link Item's link
+     * @param Link $link Container's link
      */
     public function __construct(Link $link)
     {
@@ -46,32 +46,32 @@ class Item extends BaseMenuPart
     }
 
     /**
-     * Creates new item
+     * Creates new container for a link
      *
-     * @param string     $linkName       Name of item's link
-     * @param string     $linkUrl        Url of item's link
-     * @param null|array $linkAttributes (optional) Attributes of item's link. Default: null (not provided).
-     * @param null|array $itemAttributes (optional) Attributes of the item. Default: null (not provided).
-     * @return Item
+     * @param string     $linkName       Name of container's link
+     * @param string     $linkUrl        Url of container's link
+     * @param null|array $linkAttributes (optional) Attributes of link. Default: null (not provided).
+     * @param null|array $containerAttributes (optional) Attributes of the container. Default: null (not provided).
+     * @return LinkContainer
      */
     public static function create(
         string $linkName,
         string $linkUrl,
         ?array $linkAttributes = null,
-        ?array $itemAttributes = null
-    ): Item {
+        ?array $containerAttributes = null
+    ): LinkContainer {
         $link = new Link($linkName, $linkUrl);
-        $item = new static($link);
+        $container = new static($link);
 
         if (null !== $linkAttributes) {
             $link->addAttributes($linkAttributes);
         }
 
-        if (null !== $itemAttributes) {
-            $item->addAttributes($itemAttributes);
+        if (null !== $containerAttributes) {
+            $container->addAttributes($containerAttributes);
         }
 
-        return $item;
+        return $container;
     }
 
     /**
@@ -81,7 +81,7 @@ class Item extends BaseMenuPart
     {
         $linkRendered = $this->renderLink($templates);
 
-        // Item without link?
+        // Nothing to do, because link was not rendered
         if ('' === $linkRendered) {
             return '';
         }
@@ -102,7 +102,7 @@ class Item extends BaseMenuPart
     }
 
     /**
-     * Renders item's link
+     * Renders container's link
      *
      * @param Templates $templates Collection/storage of templates that will be required while rendering this and
      *                             related objects, e.g. children of this object

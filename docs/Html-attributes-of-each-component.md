@@ -37,22 +37,22 @@ $link->addAttributes([
 $homeLink = new Link('Home', '/');
 $contactLink = new Link('Contact', '/contact');
 
-// Create items
-$homeItem = new Item($homeLink);
-$contactItem = new Item($contactLink);
+// Create links\' containers
+$homeLinkContainer = new LinkContainer($homeLink);
+$contactLinkContainer = new LinkContainer($contactLink);
 
 // Create menu
 $menu = new Menu([
-    $homeItem,
-    $contactItem,
+    $homeLinkContainer,
+    $contactLinkContainer,
 ]);
 
 // Add all attributes
 $homeLink->addAttribute('id', 'home');
 $contactLink->addAttribute('id', 'contact');
 
-$homeItem->addAttribute(Attributes::ATTRIBUTE_CSS_CLASS, 'first-item');
-$contactItem->addAttribute(Attributes::ATTRIBUTE_CSS_CLASS, 'second-item');
+$homeLinkContainer->addAttribute(Attributes::ATTRIBUTE_CSS_CLASS, 'first-link');
+$contactLinkContainer->addAttribute(Attributes::ATTRIBUTE_CSS_CLASS, 'second-link');
 
 $menu->addAttributes([
     'id'                            => 'left-navigation',
@@ -63,8 +63,8 @@ $menu->addAttributes([
 // Prepare templates (with `%attributes%` placeholders)
 $templates = new Templates([
     Link::class => new Template('<a href="%url%"%attributes%>%name%</a>'),
-    Item::class => new Template('<div%attributes%>%link%</div>'),
-    Menu::class => new Template('<div%attributes%>%items%</div>'),
+    LinkContainer::class => new Template('<div%attributes%>%link%</div>'),
+    Menu::class => new Template('<div%attributes%>%linksContainers%</div>'),
 ]);
 
 // Render the menu
@@ -75,10 +75,10 @@ echo $menu->render($templates);
 
 ```html
 <div id="left-navigation" data-show="true" class="blue-box">
-    <div class="first-item">
+    <div class="first-link">
         <a href="/" id="home">Home</a>
     </div>
-    <div class="second-item">
+    <div class="second-link">
         <a href="/contact" id="contact">Contact</a>
     </div>
 </div>
@@ -88,18 +88,18 @@ echo $menu->render($templates);
 
 The `create()` static methods are available in classes:
 
-1. `Meritoo\Menu\Item`
+1. `Meritoo\Menu\LinkContainer`
 2. `Meritoo\Menu\Menu`
 
-##### Example of item creation
+##### Example of link\'s container creation
 
-Link "Home" with "/" url and attributes (of link and the item):
+Link "Home" with "/" url and attributes (of link and the link\'s container):
 
 ```php
 $linkAttributes = ['id' => 'home'];
-$itemAttributes = [Attributes::ATTRIBUTE_CSS_CLASS => 'first-item'];
+$linkContainerAttributes = [Attributes::ATTRIBUTE_CSS_CLASS => 'first-link'];
 
-$item = Item::create('Home', '/', $linkAttributes, $itemAttributes);
+$linkContainer = LinkContainer::create('Home', '/', $linkAttributes, $linkContainerAttributes);
 ```
 
 ##### Example of menu creation
@@ -118,9 +118,9 @@ $links = [
             'id' => 'home',
         ],
 
-        // Attributes of item
+        // Attributes of link's container
         [
-            Attributes::ATTRIBUTE_CSS_CLASS => 'first-item',
+            Attributes::ATTRIBUTE_CSS_CLASS => 'first-link',
         ],
     ],
     [
@@ -130,7 +130,7 @@ $links = [
             'id' => 'contact'
         ],
         [
-            Attributes::ATTRIBUTE_CSS_CLASS => 'second-item'
+            Attributes::ATTRIBUTE_CSS_CLASS => 'second-link'
         ],
     ],
 ];
@@ -146,8 +146,8 @@ $menu = Menu::create($links, $menuAttributes);
 // Prepare templates (with `%attributes%` placeholders)
 $templates = new Templates([
     Link::class => new Template('<a href="%url%"%attributes%>%name%</a>'),
-    Item::class => new Template('<div%attributes%>%link%</div>'),
-    Menu::class => new Template('<div%attributes%>%items%</div>'),
+    LinkContainer::class => new Template('<div%attributes%>%link%</div>'),
+    Menu::class => new Template('<div%attributes%>%linksContainers%</div>'),
 ]);
 
 // Render the menu
@@ -158,10 +158,10 @@ echo $menu->render($templates);
 
 ```html
 <div id="left-navigation" data-show="true" class="blue-box">
-    <div class="first-item">
+    <div class="first-link">
         <a href="/" id="home">Home</a>
     </div>
-    <div class="second-item">
+    <div class="second-link">
         <a href="/contact" id="contact">Contact</a>
     </div>
 </div>

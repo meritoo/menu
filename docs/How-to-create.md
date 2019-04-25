@@ -8,14 +8,14 @@ Build navigation easily, without any efforts. Library that provides tools to bui
 
 1. Create link
     - instance of `Meritoo\Menu\Link` class
-2. Create item
-    - instance of `Meritoo\Menu\Item` class
+2. Create link\'s container
+    - instance of `Meritoo\Menu\LinkContainer` class
     - container for link
-    - pass link as the item's constructor argument
+    - pass link as the container's constructor argument
 3. Create menu
     - instance of `Meritoo\Menu\Menu` class
-    - container for items
-    - pass item as the menu's constructor argument
+    - container for link\'s containers
+    - pass link\'s container as the menu's constructor argument
 4. Call the `render()` method on menu's instance
 
 ### Create using constructor
@@ -27,14 +27,14 @@ Build navigation easily, without any efforts. Library that provides tools to bui
 
 ```php
 $menu = new Menu([
-    new Item(new Link('Home', '/')),
-    new Item(new Link('Contact', '/contact')),
+    new LinkContainer(new Link('Home', '/')),
+    new LinkContainer(new Link('Contact', '/contact')),
 ]);
 
 $templates = new Templates([
     Link::class => new Template('<a href="%url%">%name%</a>'),
-    Item::class => new Template('<div class="item">%link%</div>'),
-    Menu::class => new Template('<div class="container">%items%</div>'),
+    LinkContainer::class => new Template('<div class="wrapper">%link%</div>'),
+    Menu::class => new Template('<div class="container">%linksContainers%</div>'),
 ]);
 
 echo $menu->render($templates);
@@ -44,10 +44,10 @@ echo $menu->render($templates);
 
 ```html
 <div class="container">
-    <div class="item">
+    <div class="wrapper">
         <a href="/">Home</a>
     </div>
-    <div class="item">
+    <div class="wrapper">
         <a href="/contact">Contact</a>
     </div>
 </div>
@@ -57,15 +57,15 @@ echo $menu->render($templates);
 
 The `create()` static methods are available in classes:
 
-1. `Meritoo\Menu\Item`
+1. `Meritoo\Menu\LinkContainer`
 2. `Meritoo\Menu\Menu`
 
-##### Example of item creation
+##### Example of link\'s container creation
 
 Link "Home" with "/" url:
 
 ```php
-$item = Item::create('Home', '/');
+$linkContainer = LinkContainer::create('Home', '/');
 ```
 
 ##### Example of menu creation
@@ -81,8 +81,8 @@ $menu = Menu::create([
 
 $templates = new Templates([
     Link::class => new Template('<a href="%url%">%name%</a>'),
-    Item::class => new Template('<div class="item">%link%</div>'),
-    Menu::class => new Template('<div class="container">%items%</div>'),
+    LinkContainer::class => new Template('<div class="wrapper">%link%</div>'),
+    Menu::class => new Template('<div class="container">%linksContainers%</div>'),
 ]);
 
 echo $menu->render($templates);
@@ -92,10 +92,10 @@ echo $menu->render($templates);
 
 ```html
 <div class="container">
-    <div class="item">
+    <div class="wrapper">
         <a href="/">Home</a>
         </div>
-    <div class="item">
+    <div class="wrapper">
         <a href="/contact">Contact</a>
     </div>
 </div>

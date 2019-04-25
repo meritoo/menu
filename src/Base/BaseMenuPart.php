@@ -17,7 +17,7 @@ use Meritoo\Common\Renderable\RenderableInterface;
 use Meritoo\Menu\Html\Attributes;
 
 /**
- * Part of menu, e.g. link, item.
+ * Part of menu, e.g. link, link\'s container.
  * Base class for any of menu part.
  *
  * @author    Meritoo <github@meritoo.pl>

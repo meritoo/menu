@@ -18,8 +18,8 @@ use Meritoo\Common\Type\OopVisibilityType;
 use Meritoo\Common\Utilities\Reflection;
 use Meritoo\Common\ValueObject\Template;
 use Meritoo\Menu\Html\Attributes;
-use Meritoo\Menu\Item;
 use Meritoo\Menu\Link;
+use Meritoo\Menu\LinkContainer;
 use Meritoo\Menu\Menu;
 use stdClass;
 
@@ -44,7 +44,7 @@ class MenuTest extends BaseTestCase
         );
     }
 
-    public function testRenderWithoutItems(): void
+    public function testRenderWithoutLinksContainers(): void
     {
         $menu = new Menu([]);
         static::assertSame('', $menu->render(new Templates()));
@@ -62,8 +62,8 @@ class MenuTest extends BaseTestCase
         $this->expectExceptionMessage($expectedMessage);
 
         $menu = new Menu([
-            new Item(new Link('Test 1', '')),
-            new Item(new Link('Test 2', '/')),
+            new LinkContainer(new Link('Test 1', '')),
+            new LinkContainer(new Link('Test 2', '/')),
         ]);
 
         $menu->render($templates);
@@ -72,8 +72,8 @@ class MenuTest extends BaseTestCase
     public function testRenderUsingLinksWithoutNames(): void
     {
         $menu = new Menu([
-            new Item(new Link('', '')),
-            new Item(new Link('', '/')),
+            new LinkContainer(new Link('', '')),
+            new LinkContainer(new Link('', '/')),
         ]);
 
         static::assertSame('', $menu->render(new Templates()));
@@ -95,8 +95,8 @@ class MenuTest extends BaseTestCase
     public function testAddAttribute(): void
     {
         $menu = new Menu([
-            new Item(new Link('Test 1', '')),
-            new Item(new Link('Test 2', '/')),
+            new LinkContainer(new Link('Test 1', '')),
+            new LinkContainer(new Link('Test 2', '/')),
         ]);
 
         $menu->addAttribute('id', 'test');
@@ -114,8 +114,8 @@ class MenuTest extends BaseTestCase
     public function testAddAttributes(): void
     {
         $menu = new Menu([
-            new Item(new Link('Test 1', '')),
-            new Item(new Link('Test 2', '/')),
+            new LinkContainer(new Link('Test 1', '')),
+            new LinkContainer(new Link('Test 2', '/')),
         ]);
 
         $menu->addAttributes([
@@ -151,22 +151,22 @@ class MenuTest extends BaseTestCase
             new Templates([
                 Link::class => new Template('<a href="%url%">%name%</a>'),
             ]),
-            sprintf($template, Item::class),
+            sprintf($template, LinkContainer::class),
         ];
 
         yield[
             new Templates([
-                Link::class => new Template('<a href="%url%">%name%</a>'),
-                Item::class => new Template('<div class="item">%link%</div>'),
+                Link::class          => new Template('<a href="%url%">%name%</a>'),
+                LinkContainer::class => new Template('<div class="wrapper">%link%</div>'),
             ]),
             sprintf($template, Menu::class),
         ];
 
         yield[
             new Templates([
-                Link::class     => new Template('<a href="%url%">%name%</a>'),
-                Item::class     => new Template('<div class="item">%link%</div>'),
-                stdClass::class => new Template('<div class="container">%items%</div>'),
+                Link::class          => new Template('<a href="%url%">%name%</a>'),
+                LinkContainer::class => new Template('<div class="wrapper">%link%</div>'),
+                stdClass::class      => new Template('<div class="container">%linksContainers%</div>'),
             ]),
             sprintf($template, Menu::class),
         ];
@@ -177,7 +177,7 @@ class MenuTest extends BaseTestCase
      * @param array     $links       An array of arrays (0-based indexes): [0] name of link, [1] url of link
      * @param null|Menu $expected    Expected Menu
      *
-     * @dataProvider provideItemsToCreate
+     * @dataProvider provideLinksContainersToCreate
      */
     public function testCreate(string $description, array $links, ?Menu $expected): void
     {
@@ -187,12 +187,12 @@ class MenuTest extends BaseTestCase
     /**
      * @param string     $description    Description of test
      * @param array      $links          An array of arrays (0-based indexes): [0] name of link, [1] url of link, [2]
-     *                                   (optional) attributes of link, [3] (optional) attributes of item
+     *                                   (optional) attributes of link, [3] (optional) attributes of link's container
      * @param null|array $menuAttributes (optional) Attributes of the main container. It's an array of key-value pairs,
      *                                   where key - attribute, value - value of attribute
      * @param null|Menu  $expected       Expected Menu
      *
-     * @dataProvider provideItemsToCreateWithAttributes
+     * @dataProvider provideLinksContainersToCreateWithAttributes
      */
     public function testCreateWithAttributes(
         string $description,
@@ -205,66 +205,66 @@ class MenuTest extends BaseTestCase
 
     public function provideTemplatesAndMenuToRender(): ?Generator
     {
-        $items = [
-            new Item(new Link('Test 1', '/test1')),
+        $linksContainers = [
+            new LinkContainer(new Link('Test 1', '/test1')),
         ];
 
-        $menu1 = new Menu($items);
+        $menu1 = new Menu($linksContainers);
         $menu1->addAttribute(Attributes::ATTRIBUTE_CSS_CLASS, 'container');
 
-        $menu2 = new Menu($items);
+        $menu2 = new Menu($linksContainers);
         $menu2->addAttribute('id', 'main-menu');
         $menu2->addAttribute('data-position', '12');
 
         yield[
-            'Menu with 1 item only',
+            'Menu with 1 link\'s container only',
             new Templates([
-                Link::class => new Template('<a href="%url%">%name%</a>'),
-                Item::class => new Template('<div class="item">%link%</div>'),
-                Menu::class => new Template('<div class="container">%items%</div>'),
+                Link::class          => new Template('<a href="%url%">%name%</a>'),
+                LinkContainer::class => new Template('<div class="wrapper">%link%</div>'),
+                Menu::class          => new Template('<div class="container">%linksContainers%</div>'),
             ]),
-            new Menu($items),
+            new Menu($linksContainers),
             '<div class="container">'
-            . '<div class="item"><a href="/test1">Test 1</a></div>'
+            . '<div class="wrapper"><a href="/test1">Test 1</a></div>'
             . '</div>',
         ];
 
         yield[
-            'Menu with 3 items',
+            'Menu with 3 links\' containers',
             new Templates([
-                Link::class => new Template('<a href="%url%">%name%</a>'),
-                Item::class => new Template('<div class="item">%link%</div>'),
-                Menu::class => new Template('<div class="container">%items%</div>'),
+                Link::class          => new Template('<a href="%url%">%name%</a>'),
+                LinkContainer::class => new Template('<div class="wrapper">%link%</div>'),
+                Menu::class          => new Template('<div class="container">%linksContainers%</div>'),
             ]),
             new Menu([
-                new Item(new Link('Test 1', '/test1')),
-                new Item(new Link('Test 2', '/test2')),
-                new Item(new Link('Test 3', '/test3')),
+                new LinkContainer(new Link('Test 1', '/test1')),
+                new LinkContainer(new Link('Test 2', '/test2')),
+                new LinkContainer(new Link('Test 3', '/test3')),
             ]),
             '<div class="container">'
-            . '<div class="item"><a href="/test1">Test 1</a></div>'
-            . '<div class="item"><a href="/test2">Test 2</a></div>'
-            . '<div class="item"><a href="/test3">Test 3</a></div>'
+            . '<div class="wrapper"><a href="/test1">Test 1</a></div>'
+            . '<div class="wrapper"><a href="/test2">Test 2</a></div>'
+            . '<div class="wrapper"><a href="/test3">Test 3</a></div>'
             . '</div>',
         ];
 
         yield[
-            'Menu with 3 items and unordered list as template',
+            'Menu with 3 links\' containers and unordered list as template',
             new Templates([
-                Link::class => new Template('<a href="%url%" class="blue">%name%</a>'),
-                Item::class => new Template('<li class="item">%link%</li>'),
-                Menu::class => new Template('<div class="container"><ul class="wrapper">%items%</ul></div>'),
+                Link::class          => new Template('<a href="%url%" class="blue">%name%</a>'),
+                LinkContainer::class => new Template('<li class="wrapper">%link%</li>'),
+                Menu::class          => new Template('<div class="container"><ul class="wrapper">%linksContainers%</ul></div>'),
             ]),
             new Menu([
-                new Item(new Link('Test 1', '/test1')),
-                new Item(new Link('Test 2', '/test2')),
-                new Item(new Link('Test 3', '/test3')),
+                new LinkContainer(new Link('Test 1', '/test1')),
+                new LinkContainer(new Link('Test 2', '/test2')),
+                new LinkContainer(new Link('Test 3', '/test3')),
             ]),
             '<div class="container">'
             . '<ul class="wrapper">'
-            . '<li class="item"><a href="/test1" class="blue">Test 1</a></li>'
-            . '<li class="item"><a href="/test2" class="blue">Test 2</a></li>'
-            . '<li class="item"><a href="/test3" class="blue">Test 3</a></li>'
+            . '<li class="wrapper"><a href="/test1" class="blue">Test 1</a></li>'
+            . '<li class="wrapper"><a href="/test2" class="blue">Test 2</a></li>'
+            . '<li class="wrapper"><a href="/test3" class="blue">Test 3</a></li>'
             . '</ul>'
             . '</div>',
         ];
@@ -272,31 +272,31 @@ class MenuTest extends BaseTestCase
         yield[
             'With 1 attribute',
             new Templates([
-                Link::class => new Template('<a href="%url%">%name%</a>'),
-                Item::class => new Template('<div class="item">%link%</div>'),
-                Menu::class => new Template('<div%attributes%>%items%</div>'),
+                Link::class          => new Template('<a href="%url%">%name%</a>'),
+                LinkContainer::class => new Template('<div class="wrapper">%link%</div>'),
+                Menu::class          => new Template('<div%attributes%>%linksContainers%</div>'),
             ]),
             $menu1,
             '<div class="container">'
-            . '<div class="item"><a href="/test1">Test 1</a></div>'
+            . '<div class="wrapper"><a href="/test1">Test 1</a></div>'
             . '</div>',
         ];
 
         yield[
             'With more than 1 attribute',
             new Templates([
-                Link::class => new Template('<a href="%url%">%name%</a>'),
-                Item::class => new Template('<div class="item">%link%</div>'),
-                Menu::class => new Template('<div%attributes%>%items%</div>'),
+                Link::class          => new Template('<a href="%url%">%name%</a>'),
+                LinkContainer::class => new Template('<div class="wrapper">%link%</div>'),
+                Menu::class          => new Template('<div%attributes%>%linksContainers%</div>'),
             ]),
             $menu2,
             '<div id="main-menu" data-position="12">'
-            . '<div class="item"><a href="/test1">Test 1</a></div>'
+            . '<div class="wrapper"><a href="/test1">Test 1</a></div>'
             . '</div>',
         ];
     }
 
-    public function provideItemsToCreate(): ?Generator
+    public function provideLinksContainersToCreate(): ?Generator
     {
         yield[
             'An empty array',
@@ -305,51 +305,51 @@ class MenuTest extends BaseTestCase
         ];
 
         yield[
-            'Item with empty strings',
+            'Link\'s container with empty strings',
             [
                 [
                     '',
                     '',
                 ],
             ],
-            new Menu([new Item(new Link('', ''))]),
+            new Menu([new LinkContainer(new Link('', ''))]),
         ];
 
         yield[
-            'Item with incorrect indexes',
+            'Link\'s container with incorrect indexes',
             [
                 [
                     'x' => 'Test 1',
                     'y' => '/test',
                 ],
             ],
-            new Menu([new Item(new Link('', ''))]),
+            new Menu([new LinkContainer(new Link('', ''))]),
         ];
 
         yield[
-            'Item with not empty name and empty url',
+            'Link\'s container with not empty name and empty url',
             [
                 [
                     'Test',
                     '',
                 ],
             ],
-            new Menu([new Item(new Link('Test', ''))]),
+            new Menu([new LinkContainer(new Link('Test', ''))]),
         ];
 
         yield[
-            'Item with not empty name and not empty url',
+            'Link\'s container with not empty name and not empty url',
             [
                 [
                     'Test',
                     '/',
                 ],
             ],
-            new Menu([new Item(new Link('Test', '/'))]),
+            new Menu([new LinkContainer(new Link('Test', '/'))]),
         ];
 
         yield[
-            'More than 1 item',
+            'More than 1 link\'s container',
             [
                 [
                     'Test 1',
@@ -365,14 +365,14 @@ class MenuTest extends BaseTestCase
                 ],
             ],
             new Menu([
-                new Item(new Link('Test 1', '/test')),
-                new Item(new Link('Test 2', '/test/2')),
-                new Item(new Link('Test 3', '/test/46/test')),
+                new LinkContainer(new Link('Test 1', '/test')),
+                new LinkContainer(new Link('Test 2', '/test/2')),
+                new LinkContainer(new Link('Test 3', '/test/46/test')),
             ]),
         ];
     }
 
-    public function provideItemsToCreateWithAttributes(): ?Generator
+    public function provideLinksContainersToCreateWithAttributes(): ?Generator
     {
         $link1Attributes = [
             'id'                            => 'test',
@@ -384,17 +384,17 @@ class MenuTest extends BaseTestCase
             Attributes::ATTRIBUTE_CSS_CLASS => 'my-another-class',
         ];
 
-        $item1Attributes = [
+        $linkContainer1Attributes = [
             'data-show'                     => 'test',
             Attributes::ATTRIBUTE_CSS_CLASS => 'my-big-class',
         ];
 
-        $item2Attributes = [
+        $linkContainer2Attributes = [
             'data-show'                     => 'test-test',
             Attributes::ATTRIBUTE_CSS_CLASS => 'my-next-class',
         ];
 
-        $item3Attributes = [
+        $linkContainer3Attributes = [
             'id'                            => 'test-test',
             'data-show'                     => 'true',
             Attributes::ATTRIBUTE_CSS_CLASS => 'my-last-class',
@@ -416,25 +416,25 @@ class MenuTest extends BaseTestCase
         $link3WithAttributes = new Link('Test 3', '/test/46/test');
         $link3WithAttributes->addAttributes($link3Attributes);
 
-        $item1WithAttributes = new Item($link1WithAttributes);
-        $item1WithAttributes->addAttributes($item1Attributes);
+        $linkContainer1WithAttributes = new LinkContainer($link1WithAttributes);
+        $linkContainer1WithAttributes->addAttributes($linkContainer1Attributes);
 
-        $item2WithAttributes = new Item(new Link('Test 2', '/test/2'));
-        $item2WithAttributes->addAttributes($item2Attributes);
+        $linkContainer2WithAttributes = new LinkContainer(new Link('Test 2', '/test/2'));
+        $linkContainer2WithAttributes->addAttributes($linkContainer2Attributes);
 
-        $item3WithAttributes = new Item($link3WithAttributes);
-        $item3WithAttributes->addAttributes($item3Attributes);
+        $linkContainer3WithAttributes = new LinkContainer($link3WithAttributes);
+        $linkContainer3WithAttributes->addAttributes($linkContainer3Attributes);
 
         $menu1WithAttributes = new Menu([
-            new Item(new Link('Test 1', '/test')),
-            new Item(new Link('Test 2', '/test/2')),
-            new Item(new Link('Test 3', '/test/46/test')),
+            new LinkContainer(new Link('Test 1', '/test')),
+            new LinkContainer(new Link('Test 2', '/test/2')),
+            new LinkContainer(new Link('Test 3', '/test/46/test')),
         ]);
 
         $menu2WithAttributes = new Menu([
-            new Item($link1WithAttributes),
-            new Item(new Link('Test 2', '/test/2')),
-            new Item($link3WithAttributes),
+            new LinkContainer($link1WithAttributes),
+            new LinkContainer(new Link('Test 2', '/test/2')),
+            new LinkContainer($link3WithAttributes),
         ]);
 
         $menu1WithAttributes->addAttributes($menu1Attributes);
@@ -443,9 +443,9 @@ class MenuTest extends BaseTestCase
         yield[
             'Links with attributes',
             new Menu([
-                new Item($link1WithAttributes),
-                new Item(new Link('Test 2', '/test/2')),
-                new Item($link3WithAttributes),
+                new LinkContainer($link1WithAttributes),
+                new LinkContainer(new Link('Test 2', '/test/2')),
+                new LinkContainer($link3WithAttributes),
             ]),
             [
                 [
@@ -466,30 +466,30 @@ class MenuTest extends BaseTestCase
         ];
 
         yield[
-            'Links and items with attributes',
+            'Links and links\' containers with attributes',
             new Menu([
-                $item1WithAttributes,
-                $item2WithAttributes,
-                $item3WithAttributes,
+                $linkContainer1WithAttributes,
+                $linkContainer2WithAttributes,
+                $linkContainer3WithAttributes,
             ]),
             [
                 [
                     'Test 1',
                     '/test',
                     $link1Attributes,
-                    $item1Attributes,
+                    $linkContainer1Attributes,
                 ],
                 [
                     'Test 2',
                     '/test/2',
                     null,
-                    $item2Attributes,
+                    $linkContainer2Attributes,
                 ],
                 [
                     'Test 3',
                     '/test/46/test',
                     $link3Attributes,
-                    $item3Attributes,
+                    $linkContainer3Attributes,
                 ],
             ],
         ];
@@ -515,7 +515,7 @@ class MenuTest extends BaseTestCase
         ];
 
         yield[
-            'Menu, links and items with attributes',
+            'Menu, links and links\' containers with attributes',
             $menu2WithAttributes,
             [
                 [
