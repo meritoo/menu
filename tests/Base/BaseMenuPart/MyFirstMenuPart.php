@@ -14,7 +14,7 @@ use Meritoo\Common\Collection\Templates;
 use Meritoo\Menu\Base\BaseMenuPart;
 
 /**
- * Part of menu used by test case of BaseMenuPart
+ * Part of menu used by test case of \Meritoo\Menu\Base\BaseMenuPart
  *
  * @author    Meritoo <github@meritoo.pl>
  * @copyright Meritoo <http://www.meritoo.pl>

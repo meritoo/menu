@@ -116,7 +116,7 @@ abstract class BaseMenuPart implements RenderableInterface
      *
      * @return string
      */
-    protected function getAttributesAsString(): string
+    private function getAttributesAsString(): string
     {
         if ($this->getAttributes()->isEmpty()) {
             return '';

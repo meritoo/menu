@@ -48,9 +48,9 @@ class LinkContainer extends BaseMenuPart
     /**
      * Creates new container for a link
      *
-     * @param string     $linkName       Name of container's link
-     * @param string     $linkUrl        Url of container's link
-     * @param null|array $linkAttributes (optional) Attributes of link. Default: null (not provided).
+     * @param string     $linkName            Name of container's link
+     * @param string     $linkUrl             Url of container's link
+     * @param null|array $linkAttributes      (optional) Attributes of link. Default: null (not provided).
      * @param null|array $containerAttributes (optional) Attributes of the container. Default: null (not provided).
      * @return LinkContainer
      */
@@ -81,7 +81,7 @@ class LinkContainer extends BaseMenuPart
     {
         $linkRendered = $this->renderLink($templates);
 
-        // Nothing to do, because link was not rendered
+        // Nothing to do, because rendered link is empty
         if ('' === $linkRendered) {
             return '';
         }
