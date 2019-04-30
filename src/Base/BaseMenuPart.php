@@ -14,6 +14,7 @@ use Meritoo\Common\Collection\Templates;
 use Meritoo\Common\Exception\ValueObject\Template\MissingPlaceholdersInValuesException;
 use Meritoo\Common\Exception\ValueObject\Template\TemplateNotFoundException;
 use Meritoo\Common\Renderable\RenderableInterface;
+use Meritoo\Menu\Base\Visitor\VisitorInterface;
 use Meritoo\Menu\Html\Attributes;
 
 /**
@@ -61,6 +62,30 @@ abstract class BaseMenuPart implements RenderableInterface
         foreach ($attributes as $name => $value) {
             $this->addAttribute($name, $value);
         }
+    }
+
+    /**
+     * Runs given visitor
+     *
+     * @param VisitorInterface $visitor The visitor to run
+     */
+    public function accept(VisitorInterface $visitor): void
+    {
+        $visitor->visit($this);
+    }
+
+    /**
+     * Returns attributes exported to array
+     *
+     * @return array
+     */
+    public function getAttributesAsArray(): array
+    {
+        if ($this->getAttributes()->isEmpty()) {
+            return [];
+        }
+
+        return $this->getAttributes()->toArray();
     }
 
     /**

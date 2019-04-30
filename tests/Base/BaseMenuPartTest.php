@@ -133,6 +133,18 @@ class BaseMenuPartTest extends BaseTestCase
         static::assertEquals($expected, $existing);
     }
 
+    /**
+     * @param string       $description Description of test
+     * @param BaseMenuPart $menuPart    The part of menu
+     * @param array        $expected    Expected attributes
+     *
+     * @dataProvider provideMenuPartAndAttributes
+     */
+    public function testGetAttributesAsArray(string $description, BaseMenuPart $menuPart, array $expected): void
+    {
+        static::assertEquals($expected, $menuPart->getAttributesAsArray(), $description);
+    }
+
     public function provideMenuPartForRender(): ?Generator
     {
         $menuPart = new MyFirstMenuPart('Home');
@@ -233,6 +245,32 @@ class BaseMenuPartTest extends BaseTestCase
                 'data-start'                    => 'true',
                 Attributes::ATTRIBUTE_CSS_CLASS => 'blue-box',
             ]),
+        ];
+    }
+
+    public function provideMenuPartAndAttributes(): ?Generator
+    {
+        $first = new MyFirstMenuPart('Test');
+
+        $attributes = [
+            'id'                            => 'test',
+            'data-start'                    => 'true',
+            Attributes::ATTRIBUTE_CSS_CLASS => 'blue-box',
+        ];
+
+        $second = new MySecondMenuPart('100', 'blue');
+        $second->addAttributes($attributes);
+
+        yield[
+            '1st instance',
+            $first,
+            [],
+        ];
+
+        yield[
+            '2nd instance',
+            $second,
+            $attributes,
         ];
     }
 }
