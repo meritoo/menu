@@ -11,12 +11,19 @@ declare(strict_types=1);
 namespace Meritoo\Test\Menu\Visitor;
 
 use Meritoo\Common\Test\Base\BaseTestCase;
+use Meritoo\Common\Type\OopVisibilityType;
 use Meritoo\Menu\Html\Attributes;
 use Meritoo\Menu\Link;
 use Meritoo\Menu\LinkContainer;
 use Meritoo\Menu\Menu;
+use Meritoo\Menu\MenuPart;
 use Meritoo\Menu\Visitor\Visitor;
+use Meritoo\Menu\Visitor\VisitorInterface;
+use Meritoo\Test\Menu\Base\MenuPart\MyFirstMenuPart;
+use Meritoo\Test\Menu\Base\MenuPart\MySecondMenuPart;
+use Meritoo\Test\Menu\Visitor\Factory\VisitorFactory\First\MyFirstVisitorFactory;
 use Meritoo\Test\Menu\Visitor\Visitor\MyFirstVisitor;
+use Meritoo\Test\Menu\Visitor\Visitor\MySecondVisitor;
 
 /**
  * Test case for the visitor of any menu part
@@ -29,118 +36,146 @@ use Meritoo\Test\Menu\Visitor\Visitor\MyFirstVisitor;
  */
 class VisitorTest extends BaseTestCase
 {
+    public function testConstructorVisibilityAndArguments(): void
+    {
+        static::assertConstructorVisibilityAndArguments(
+            Visitor::class,
+            OopVisibilityType::IS_PUBLIC,
+            1,
+            1
+        );
+    }
+
     public function testConstructor(): void
     {
-        static::assertHasNoConstructor(Visitor::class);
+        $menu = new Menu([]);
+
+        $visitor = new Visitor(new MyFirstVisitorFactory());
+        $visitor->visit($menu);
+
+        static::assertCount(1, $menu->getAttributesAsArray());
     }
 
     /**
-     * @param string  $description Description of test
-     * @param Visitor $visitor     The visitor
-     * @param Menu    $menu        The menu to visit
+     * @param string           $description        Description of test
+     * @param VisitorInterface $visitor            The visitor
+     * @param MenuPart         $menuPart           The menu part to visit
+     * @param array            $expectedAttributes Expected attributes of menu part
      *
-     * @dataProvider provideVisitorAndMenu
+     * @dataProvider provideVisitorAndMenuPart
      */
-    public function testVisitMenu(string $description, Visitor $visitor, Menu $menu): void
-    {
-        $attributesBefore = $menu->getAttributesAsArray();
-        $menu->accept($visitor);
-        $attributesAfter = $menu->getAttributesAsArray();
-
-        static::assertCount(0, $attributesBefore, $description);
-        static::assertCount(1, $attributesAfter, $description);
-        static::assertEquals(['id' => 'just-testing'], $attributesAfter, $description);
-    }
-
-    /**
-     * @param string        $description   Description of test
-     * @param Visitor       $visitor       The visitor
-     * @param LinkContainer $linkContainer The container for a link to visit
-     *
-     * @dataProvider provideVisitorAndLinkContainer
-     */
-    public function testVisitLinkContainer(
+    public function testVisit(
         string $description,
-        Visitor $visitor,
-        LinkContainer $linkContainer
+        VisitorInterface $visitor,
+        MenuPart $menuPart,
+        array $expectedAttributes
     ): void {
-        $attributesBefore = $linkContainer->getAttributesAsArray();
-        $linkContainer->accept($visitor);
-        $attributesAfter = $linkContainer->getAttributesAsArray();
+        $attributesBefore = $menuPart->getAttributesAsArray();
+        $menuPart->accept($visitor);
+        $attributesAfter = $menuPart->getAttributesAsArray();
 
-        static::assertCount(0, $attributesBefore, $description);
-        static::assertCount(1, $attributesAfter, $description);
-        static::assertEquals([Attributes::ATTRIBUTE_CSS_CLASS => 'first-container'], $attributesAfter, $description);
+        static::assertEquals([], $attributesBefore, $description);
+        static::assertEquals($expectedAttributes, $attributesAfter, $description);
     }
 
-    /**
-     * @param string  $description Description of test
-     * @param Visitor $visitor     The visitor
-     * @param Link    $link        The link to visit
-     *
-     * @dataProvider provideVisitorAndLink
-     */
-    public function testVisitLink(string $description, Visitor $visitor, Link $link): void
-    {
-        $attributesBefore = $link->getAttributesAsArray();
-        $link->accept($visitor);
-        $attributesAfter = $link->getAttributesAsArray();
-
-        static::assertCount(0, $attributesBefore, $description);
-        static::assertCount(3, $attributesAfter, $description);
-
-        static::assertEquals([
-            'id'                            => 'test',
-            'data-start'                    => 'true',
-            Attributes::ATTRIBUTE_CSS_CLASS => 'blue-box',
-        ], $attributesAfter, $description);
-    }
-
-    public function provideVisitorAndMenu(): ?\Generator
+    public function provideVisitorAndMenuPart(): ?\Generator
     {
         yield[
-            'Menu without containers with links',
-            new MyFirstVisitor(),
+            'Default Visitor & Menu',
+            new Visitor(new MyFirstVisitorFactory()),
             new Menu([]),
+            [
+                'id' => 'main-menu',
+            ],
         ];
 
         yield[
-            'Menu with containers with links',
+            'Default Visitor & MyFirstMenuPart',
+            new Visitor(new MyFirstVisitorFactory()),
+            new MyFirstMenuPart('Test'),
+            [],
+        ];
+
+        yield[
+            'Default Visitor & MySecondMenuPart',
+            new Visitor(new MyFirstVisitorFactory()),
+            new MySecondMenuPart('100', 'blue'),
+            [],
+        ];
+
+        yield[
+            'Custom Visitor & Menu 1',
+            new MyFirstVisitor(),
+            new Menu([]),
+            [
+                'id' => 'just-testing',
+            ],
+        ];
+
+        yield[
+            'Custom Visitor & Menu 2',
             new MyFirstVisitor(),
             new Menu([
                 new LinkContainer(new Link('Test 1', '')),
                 new LinkContainer(new Link('Test 2', '/')),
             ]),
+            [
+                'id' => 'just-testing',
+            ],
         ];
-    }
 
-    public function provideVisitorAndLinkContainer(): ?\Generator
-    {
         yield[
-            '1st instance',
+            'Default Visitor & LinkContainer',
+            new Visitor(new MyFirstVisitorFactory()),
+            new LinkContainer(new Link('Test', '')),
+            [
+                Attributes::ATTRIBUTE_CSS_CLASS => 'link-wrapper',
+            ],
+        ];
+
+        yield[
+            'Custom Visitor & LinkContainer 1',
             new MyFirstVisitor(),
             new LinkContainer(new Link('', '')),
+            [
+                Attributes::ATTRIBUTE_CSS_CLASS => 'first-container',
+            ],
         ];
 
         yield[
-            '2nd instance',
+            'Custom Visitor & LinkContainer 2',
             new MyFirstVisitor(),
             new LinkContainer(new Link('Test', '/')),
+            [
+                Attributes::ATTRIBUTE_CSS_CLASS => 'first-container',
+            ],
         ];
-    }
 
-    public function provideVisitorAndLink(): ?\Generator
-    {
         yield[
-            '1st instance',
+            'Default Visitor & Link',
+            new Visitor(new MyFirstVisitorFactory()),
+            new Link('Test', ''),
+            [
+                'data-start' => 'true',
+            ],
+        ];
+
+        yield[
+            'Custom Visitor & Link 1',
             new MyFirstVisitor(),
             new Link('', ''),
+            [
+                'id'                            => 'test',
+                'data-start'                    => 'true',
+                Attributes::ATTRIBUTE_CSS_CLASS => 'blue-box',
+            ],
         ];
 
         yield[
-            '2nd instance',
-            new MyFirstVisitor(),
+            'Custom Visitor & Link 2',
+            new MySecondVisitor(),
             new Link('Test', '/'),
+            [],
         ];
     }
 }

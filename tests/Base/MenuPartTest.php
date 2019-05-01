@@ -16,9 +16,17 @@ use Meritoo\Common\Test\Base\BaseTestCase;
 use Meritoo\Common\Utilities\Reflection;
 use Meritoo\Common\ValueObject\Template;
 use Meritoo\Menu\Html\Attributes;
+use Meritoo\Menu\Link;
+use Meritoo\Menu\LinkContainer;
+use Meritoo\Menu\Menu;
 use Meritoo\Menu\MenuPart;
+use Meritoo\Menu\Visitor\Visitor;
+use Meritoo\Menu\Visitor\VisitorInterface;
 use Meritoo\Test\Menu\Base\MenuPart\MyFirstMenuPart;
 use Meritoo\Test\Menu\Base\MenuPart\MySecondMenuPart;
+use Meritoo\Test\Menu\Visitor\Factory\VisitorFactory\First\MyFirstVisitorFactory;
+use Meritoo\Test\Menu\Visitor\Visitor\MyFirstVisitor;
+use Meritoo\Test\Menu\Visitor\Visitor\MySecondVisitor;
 
 /**
  * Test case for the part of menu, e.g. link, link\'s container
@@ -143,6 +151,24 @@ class MenuPartTest extends BaseTestCase
     public function testGetAttributesAsArray(string $description, MenuPart $menuPart, array $expected): void
     {
         static::assertEquals($expected, $menuPart->getAttributesAsArray(), $description);
+    }
+
+    /**
+     * @param string           $description        Description of test
+     * @param VisitorInterface $visitor            The visitor
+     * @param MenuPart         $menuPart           The menu part to visit
+     * @param array            $expectedAttributes Expected attributes of menu part
+     *
+     * @dataProvider provideMenuPartAndVisitor
+     */
+    public function testAccept(
+        string $description,
+        VisitorInterface $visitor,
+        MenuPart $menuPart,
+        array $expectedAttributes
+    ): void {
+        $menuPart->accept($visitor);
+        static::assertEquals($expectedAttributes, $menuPart->getAttributesAsArray(), $description);
     }
 
     public function provideMenuPartForRender(): ?Generator
@@ -271,6 +297,107 @@ class MenuPartTest extends BaseTestCase
             '2nd instance',
             $second,
             $attributes,
+        ];
+    }
+
+    public function provideMenuPartAndVisitor(): ?Generator
+    {
+        yield[
+            'Default Visitor & Menu',
+            new Visitor(new MyFirstVisitorFactory()),
+            new Menu([]),
+            [
+                'id' => 'main-menu',
+            ],
+        ];
+
+        yield[
+            'Default Visitor & MyFirstMenuPart',
+            new Visitor(new MyFirstVisitorFactory()),
+            new MyFirstMenuPart('Test'),
+            [],
+        ];
+
+        yield[
+            'Default Visitor & MySecondMenuPart',
+            new Visitor(new MyFirstVisitorFactory()),
+            new MySecondMenuPart('100', 'blue'),
+            [],
+        ];
+
+        yield[
+            'Custom Visitor & Menu 1',
+            new MyFirstVisitor(),
+            new Menu([]),
+            [
+                'id' => 'just-testing',
+            ],
+        ];
+
+        yield[
+            'Custom Visitor & Menu 2',
+            new MyFirstVisitor(),
+            new Menu([
+                new LinkContainer(new Link('Test 1', '')),
+                new LinkContainer(new Link('Test 2', '/')),
+            ]),
+            [
+                'id' => 'just-testing',
+            ],
+        ];
+
+        yield[
+            'Default Visitor & LinkContainer',
+            new Visitor(new MyFirstVisitorFactory()),
+            new LinkContainer(new Link('Test', '')),
+            [
+                Attributes::ATTRIBUTE_CSS_CLASS => 'link-wrapper',
+            ],
+        ];
+
+        yield[
+            'Custom Visitor & LinkContainer 1',
+            new MyFirstVisitor(),
+            new LinkContainer(new Link('', '')),
+            [
+                Attributes::ATTRIBUTE_CSS_CLASS => 'first-container',
+            ],
+        ];
+
+        yield[
+            'Custom Visitor & LinkContainer 2',
+            new MyFirstVisitor(),
+            new LinkContainer(new Link('Test', '/')),
+            [
+                Attributes::ATTRIBUTE_CSS_CLASS => 'first-container',
+            ],
+        ];
+
+        yield[
+            'Default Visitor & Link',
+            new Visitor(new MyFirstVisitorFactory()),
+            new Link('Test', ''),
+            [
+                'data-start' => 'true',
+            ],
+        ];
+
+        yield[
+            'Custom Visitor & Link 1',
+            new MyFirstVisitor(),
+            new Link('', ''),
+            [
+                'id'                            => 'test',
+                'data-start'                    => 'true',
+                Attributes::ATTRIBUTE_CSS_CLASS => 'blue-box',
+            ],
+        ];
+
+        yield[
+            'Custom Visitor & Link 2',
+            new MySecondVisitor(),
+            new Link('Test', '/'),
+            [],
         ];
     }
 }

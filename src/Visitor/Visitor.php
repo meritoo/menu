@@ -10,10 +10,8 @@ declare(strict_types=1);
 
 namespace Meritoo\Menu\Visitor;
 
-use Meritoo\Menu\Link;
-use Meritoo\Menu\LinkContainer;
-use Meritoo\Menu\Menu;
 use Meritoo\Menu\MenuPart;
+use Meritoo\Menu\Visitor\Factory\VisitorFactory;
 
 /**
  * Visitor of any menu part
@@ -21,48 +19,36 @@ use Meritoo\Menu\MenuPart;
  * @author    Meritoo <github@meritoo.pl>
  * @copyright Meritoo <http://www.meritoo.pl>
  */
-abstract class Visitor implements VisitorInterface
+class Visitor implements VisitorInterface
 {
+    /**
+     * Factory of visitors for each supported menu parts
+     *
+     * @var VisitorFactory
+     */
+    private $visitorFactory;
+
+    /**
+     * Class constructor
+     *
+     * @param VisitorFactory $visitorFactory Factory of visitors for each supported menu parts
+     */
+    public function __construct(VisitorFactory $visitorFactory)
+    {
+        $this->visitorFactory = $visitorFactory;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function visit(MenuPart $menuPart): void
     {
-        if ($menuPart instanceof Menu) {
-            $this->visitMenu($menuPart);
+        $visitor = $this->visitorFactory->createVisitor($menuPart);
 
+        if (null === $visitor) {
             return;
         }
 
-        if ($menuPart instanceof LinkContainer) {
-            $this->visitLinkContainer($menuPart);
-
-            return;
-        }
-
-        if ($menuPart instanceof Link) {
-            $this->visitLink($menuPart);
-        }
+        $visitor->visit($menuPart);
     }
-
-    /**
-     * Visits given menu
-     *
-     * @param Menu $menu The menu to visit
-     */
-    abstract protected function visitMenu(Menu $menu): void;
-
-    /**
-     * Visits given container for a link
-     *
-     * @param LinkContainer $linkContainer Container for a link to visit
-     */
-    abstract protected function visitLinkContainer(LinkContainer $linkContainer): void;
-
-    /**
-     * Visits given link
-     *
-     * @param Link $link Link to visit
-     */
-    abstract protected function visitLink(Link $link): void;
 }

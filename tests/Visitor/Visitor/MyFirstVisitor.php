@@ -14,7 +14,9 @@ use Meritoo\Menu\Html\Attributes;
 use Meritoo\Menu\Link;
 use Meritoo\Menu\LinkContainer;
 use Meritoo\Menu\Menu;
-use Meritoo\Menu\Visitor\Visitor;
+use Meritoo\Menu\MenuPart;
+use Meritoo\Menu\Visitor\VisitorInterface;
+use Meritoo\Test\Menu\Base\MenuPart\MyFirstMenuPart;
 
 /**
  * Visitor used by test case of \Meritoo\Menu\Base\Visitor
@@ -25,12 +27,47 @@ use Meritoo\Menu\Visitor\Visitor;
  * @internal
  * @coversNothing
  */
-class MyFirstVisitor extends Visitor
+class MyFirstVisitor implements VisitorInterface
 {
     /**
      * {@inheritdoc}
      */
-    protected function visitLink(Link $link): void
+    public function visit(MenuPart $menuPart): void
+    {
+        if ($menuPart instanceof Menu) {
+            $this->visitMenu($menuPart);
+
+            return;
+        }
+
+        if ($menuPart instanceof LinkContainer) {
+            $this->visitLinkContainer($menuPart);
+
+            return;
+        }
+
+        if ($menuPart instanceof Link) {
+            $this->visitLink($menuPart);
+
+            return;
+        }
+
+        if ($menuPart instanceof MyFirstMenuPart) {
+            $this->visitFirstMenuPart($menuPart);
+        }
+    }
+
+    private function visitMenu(Menu $menu): void
+    {
+        $menu->addAttribute('id', 'just-testing');
+    }
+
+    private function visitLinkContainer(LinkContainer $linkContainer): void
+    {
+        $linkContainer->addAttribute(Attributes::ATTRIBUTE_CSS_CLASS, 'first-container');
+    }
+
+    private function visitLink(Link $link): void
     {
         $link->addAttributes([
             'id'                            => 'test',
@@ -39,19 +76,12 @@ class MyFirstVisitor extends Visitor
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function visitLinkContainer(LinkContainer $linkContainer): void
+    private function visitFirstMenuPart(MyFirstMenuPart $menuPart): void
     {
-        $linkContainer->addAttribute(Attributes::ATTRIBUTE_CSS_CLASS, 'first-container');
-    }
+        $attributes = $menuPart->getAttributesAsArray();
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function visitMenu(Menu $menu): void
-    {
-        $menu->addAttribute('id', 'just-testing');
+        if (0 === count($attributes)) {
+            $menuPart->addAttribute(Attributes::ATTRIBUTE_CSS_CLASS, 'visible');
+        }
     }
 }
