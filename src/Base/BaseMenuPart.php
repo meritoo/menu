@@ -14,8 +14,8 @@ use Meritoo\Common\Collection\Templates;
 use Meritoo\Common\Exception\ValueObject\Template\MissingPlaceholdersInValuesException;
 use Meritoo\Common\Exception\ValueObject\Template\TemplateNotFoundException;
 use Meritoo\Common\Renderable\RenderableInterface;
-use Meritoo\Menu\Base\Visitor\VisitorInterface;
 use Meritoo\Menu\Html\Attributes;
+use Meritoo\Menu\Visitor\VisitorInterface;
 
 /**
  * Part of menu, e.g. link, link\'s container.

@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace Meritoo\Menu\Base\Visitor;
+namespace Meritoo\Menu\Visitor;
 
 use Meritoo\Menu\Base\BaseMenuPart;
 

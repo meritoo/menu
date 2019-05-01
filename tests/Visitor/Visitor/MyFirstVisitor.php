@@ -8,16 +8,16 @@
 
 declare(strict_types=1);
 
-namespace Meritoo\Test\Menu\Base\MenuPartVisitor;
+namespace Meritoo\Test\Menu\Visitor\Visitor;
 
-use Meritoo\Menu\Base\BaseVisitor;
 use Meritoo\Menu\Html\Attributes;
 use Meritoo\Menu\Link;
 use Meritoo\Menu\LinkContainer;
 use Meritoo\Menu\Menu;
+use Meritoo\Menu\Visitor\Visitor;
 
 /**
- * Visitor used by test case of \Meritoo\Menu\Base\BaseVisitor
+ * Visitor used by test case of \Meritoo\Menu\Base\Visitor
  *
  * @author    Meritoo <github@meritoo.pl>
  * @copyright Meritoo <http://www.meritoo.pl>
@@ -25,7 +25,7 @@ use Meritoo\Menu\Menu;
  * @internal
  * @coversNothing
  */
-class MyFirstVisitor extends BaseVisitor
+class MyFirstVisitor extends Visitor
 {
     /**
      * {@inheritdoc}

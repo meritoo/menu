@@ -8,20 +8,20 @@
 
 declare(strict_types=1);
 
-namespace Meritoo\Menu\Base;
+namespace Meritoo\Menu\Visitor;
 
-use Meritoo\Menu\Base\Visitor\VisitorInterface;
+use Meritoo\Menu\Base\BaseMenuPart;
 use Meritoo\Menu\Link;
 use Meritoo\Menu\LinkContainer;
 use Meritoo\Menu\Menu;
 
 /**
- * Base visitor of any menu part
+ * Visitor of any menu part
  *
  * @author    Meritoo <github@meritoo.pl>
  * @copyright Meritoo <http://www.meritoo.pl>
  */
-abstract class BaseVisitor implements VisitorInterface
+abstract class Visitor implements VisitorInterface
 {
     /**
      * {@inheritdoc}

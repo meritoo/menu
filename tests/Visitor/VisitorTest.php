@@ -8,40 +8,40 @@
 
 declare(strict_types=1);
 
-namespace Meritoo\Test\Menu\Base;
+namespace Meritoo\Test\Menu\Visitor;
 
 use Meritoo\Common\Test\Base\BaseTestCase;
-use Meritoo\Menu\Base\BaseVisitor;
 use Meritoo\Menu\Html\Attributes;
 use Meritoo\Menu\Link;
 use Meritoo\Menu\LinkContainer;
 use Meritoo\Menu\Menu;
-use Meritoo\Test\Menu\Base\MenuPartVisitor\MyFirstVisitor;
+use Meritoo\Menu\Visitor\Visitor;
+use Meritoo\Test\Menu\Visitor\Visitor\MyFirstVisitor;
 
 /**
- * Test case for the base visitor of any menu part
+ * Test case for the visitor of any menu part
  *
  * @author    Meritoo <github@meritoo.pl>
  * @copyright Meritoo <http://www.meritoo.pl>
  *
  * @internal
- * @covers    \Meritoo\Menu\Base\BaseVisitor
+ * @covers    \Meritoo\Menu\Visitor\Visitor
  */
-class BaseVisitorTest extends BaseTestCase
+class VisitorTest extends BaseTestCase
 {
     public function testConstructor(): void
     {
-        static::assertHasNoConstructor(BaseVisitor::class);
+        static::assertHasNoConstructor(Visitor::class);
     }
 
     /**
-     * @param string      $description Description of test
-     * @param BaseVisitor $visitor     The visitor
-     * @param Menu        $menu        The menu to visit
+     * @param string  $description Description of test
+     * @param Visitor $visitor     The visitor
+     * @param Menu    $menu        The menu to visit
      *
      * @dataProvider provideVisitorAndMenu
      */
-    public function testVisitMenu(string $description, BaseVisitor $visitor, Menu $menu): void
+    public function testVisitMenu(string $description, Visitor $visitor, Menu $menu): void
     {
         $attributesBefore = $menu->getAttributesAsArray();
         $menu->accept($visitor);
@@ -54,14 +54,14 @@ class BaseVisitorTest extends BaseTestCase
 
     /**
      * @param string        $description   Description of test
-     * @param BaseVisitor   $visitor       The visitor
+     * @param Visitor       $visitor       The visitor
      * @param LinkContainer $linkContainer The container for a link to visit
      *
      * @dataProvider provideVisitorAndLinkContainer
      */
     public function testVisitLinkContainer(
         string $description,
-        BaseVisitor $visitor,
+        Visitor $visitor,
         LinkContainer $linkContainer
     ): void {
         $attributesBefore = $linkContainer->getAttributesAsArray();
@@ -74,13 +74,13 @@ class BaseVisitorTest extends BaseTestCase
     }
 
     /**
-     * @param string      $description Description of test
-     * @param BaseVisitor $visitor     The visitor
-     * @param Link        $link        The link to visit
+     * @param string  $description Description of test
+     * @param Visitor $visitor     The visitor
+     * @param Link    $link        The link to visit
      *
      * @dataProvider provideVisitorAndLink
      */
-    public function testVisitLink(string $description, BaseVisitor $visitor, Link $link): void
+    public function testVisitLink(string $description, Visitor $visitor, Link $link): void
     {
         $attributesBefore = $link->getAttributesAsArray();
         $link->accept($visitor);
