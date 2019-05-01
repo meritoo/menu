@@ -102,7 +102,7 @@ abstract class MenuPart implements RenderableInterface
      *
      * @return Attributes
      */
-    protected function getAttributes(): Attributes
+    private function getAttributes(): Attributes
     {
         if (null === $this->attributes) {
             $this->attributes = new Attributes();

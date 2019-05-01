@@ -9,6 +9,7 @@ Build navigation easily, without any efforts. Library that provides tools to bui
 3. Move and rename class: `BaseVisitor` -> `Visitor` (`Meritoo\Menu\Base` -> `Meritoo\Menu\Visitor`)
 4. Move and rename class: `BaseMenuPart` -> `MenuPart` (`Meritoo\Menu\Base` -> `Meritoo\Menu`)
 5. Visitor for menu part > use Abstract Factory to create visitors for different menu parts
+6. Meritoo\Menu\MenuPart::getAttributes() method > make private (not protected), because it is internal method only
 
 # 0.0.1
 
