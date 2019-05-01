@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace Meritoo\Menu\Base;
+namespace Meritoo\Menu;
 
 use Meritoo\Common\Collection\Templates;
 use Meritoo\Common\Exception\ValueObject\Template\MissingPlaceholdersInValuesException;
@@ -24,7 +24,7 @@ use Meritoo\Menu\Visitor\VisitorInterface;
  * @author    Meritoo <github@meritoo.pl>
  * @copyright Meritoo <http://www.meritoo.pl>
  */
-abstract class BaseMenuPart implements RenderableInterface
+abstract class MenuPart implements RenderableInterface
 {
     /**
      * HTML attributes, e.g. "class", "id"

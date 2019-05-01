@@ -15,10 +15,10 @@ use Meritoo\Common\Collection\Templates;
 use Meritoo\Common\Test\Base\BaseTestCase;
 use Meritoo\Common\Utilities\Reflection;
 use Meritoo\Common\ValueObject\Template;
-use Meritoo\Menu\Base\BaseMenuPart;
 use Meritoo\Menu\Html\Attributes;
-use Meritoo\Test\Menu\Base\BaseMenuPart\MyFirstMenuPart;
-use Meritoo\Test\Menu\Base\BaseMenuPart\MySecondMenuPart;
+use Meritoo\Menu\MenuPart;
+use Meritoo\Test\Menu\Base\MenuPart\MyFirstMenuPart;
+use Meritoo\Test\Menu\Base\MenuPart\MySecondMenuPart;
 
 /**
  * Test case for the part of menu, e.g. link, link\'s container
@@ -27,41 +27,41 @@ use Meritoo\Test\Menu\Base\BaseMenuPart\MySecondMenuPart;
  * @copyright Meritoo <http://www.meritoo.pl>
  *
  * @internal
- * @covers    \Meritoo\Menu\Base\BaseMenuPart
+ * @covers    \Meritoo\Menu\MenuPart
  */
-class BaseMenuPartTest extends BaseTestCase
+class MenuPartTest extends BaseTestCase
 {
     public function testConstructor(): void
     {
-        static::assertHasNoConstructor(BaseMenuPart::class);
+        static::assertHasNoConstructor(MenuPart::class);
     }
 
     /**
-     * @param string       $description Description of test
-     * @param BaseMenuPart $menuPart    The part of menu
-     * @param Templates    $templates   Collection/storage of templates that will be required while rendering this and
+     * @param string    $description    Description of test
+     * @param MenuPart  $menuPart       The part of menu
+     * @param Templates $templates      Collection/storage of templates that will be required while rendering this and
      *                                  related objects, e.g. children of this object
-     * @param string       $expected    Expected result of rendering
+     * @param string    $expected       Expected result of rendering
      *
      * @dataProvider provideMenuPartForRender
      */
-    public function testRender(string $description, BaseMenuPart $menuPart, Templates $templates, string $expected): void
+    public function testRender(string $description, MenuPart $menuPart, Templates $templates, string $expected): void
     {
         static::assertSame($expected, $menuPart->render($templates), $description);
     }
 
     /**
-     * @param string       $description Description of test
-     * @param BaseMenuPart $menuPart    The part of menu
-     * @param string       $name        Name of attribute
-     * @param string       $value       Value of attribute
-     * @param Attributes   $expected    Expected attributes
+     * @param string     $description Description of test
+     * @param MenuPart   $menuPart    The part of menu
+     * @param string     $name        Name of attribute
+     * @param string     $value       Value of attribute
+     * @param Attributes $expected    Expected attributes
      *
      * @dataProvider provideAttributeToAdd
      */
     public function testAddAttribute(
         string $description,
-        BaseMenuPart $menuPart,
+        MenuPart $menuPart,
         string $name,
         string $value,
         Attributes $expected
@@ -90,16 +90,16 @@ class BaseMenuPartTest extends BaseTestCase
     }
 
     /**
-     * @param string       $description Description of test
-     * @param BaseMenuPart $menuPart    The part of menu
-     * @param array        $attributes  Key-value pairs, where key - name of attribute, value-value of attribute
-     * @param Attributes   $expected    Expected attributes
+     * @param string     $description Description of test
+     * @param MenuPart   $menuPart    The part of menu
+     * @param array      $attributes  Key-value pairs, where key - name of attribute, value-value of attribute
+     * @param Attributes $expected    Expected attributes
      *
      * @dataProvider provideAttributesToAdd
      */
     public function testAddAttributes(
         string $description,
-        BaseMenuPart $menuPart,
+        MenuPart $menuPart,
         array $attributes,
         Attributes $expected
     ): void {
@@ -134,13 +134,13 @@ class BaseMenuPartTest extends BaseTestCase
     }
 
     /**
-     * @param string       $description Description of test
-     * @param BaseMenuPart $menuPart    The part of menu
-     * @param array        $expected    Expected attributes
+     * @param string   $description Description of test
+     * @param MenuPart $menuPart    The part of menu
+     * @param array    $expected    Expected attributes
      *
      * @dataProvider provideMenuPartAndAttributes
      */
-    public function testGetAttributesAsArray(string $description, BaseMenuPart $menuPart, array $expected): void
+    public function testGetAttributesAsArray(string $description, MenuPart $menuPart, array $expected): void
     {
         static::assertEquals($expected, $menuPart->getAttributesAsArray(), $description);
     }

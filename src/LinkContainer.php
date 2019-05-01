@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace Meritoo\Menu;
 
 use Meritoo\Common\Collection\Templates;
-use Meritoo\Menu\Base\BaseMenuPart;
 
 /**
  * Container for a link
@@ -19,7 +18,7 @@ use Meritoo\Menu\Base\BaseMenuPart;
  * @author    Meritoo <github@meritoo.pl>
  * @copyright Meritoo <http://www.meritoo.pl>
  */
-class LinkContainer extends BaseMenuPart
+class LinkContainer extends MenuPart
 {
     /**
      * Container's link

@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Meritoo\Menu\Visitor;
 
-use Meritoo\Menu\Base\BaseMenuPart;
+use Meritoo\Menu\MenuPart;
 
 /**
  * Visitor for menu part.
@@ -24,7 +24,7 @@ interface VisitorInterface
     /**
      * Visits given part of menu
      *
-     * @param BaseMenuPart $menuPart Part of menu to visit
+     * @param MenuPart $menuPart Part of menu to visit
      */
-    public function visit(BaseMenuPart $menuPart): void;
+    public function visit(MenuPart $menuPart): void;
 }

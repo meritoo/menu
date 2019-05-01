@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 namespace Meritoo\Menu\Visitor;
 
-use Meritoo\Menu\Base\BaseMenuPart;
 use Meritoo\Menu\Link;
 use Meritoo\Menu\LinkContainer;
 use Meritoo\Menu\Menu;
+use Meritoo\Menu\MenuPart;
 
 /**
  * Visitor of any menu part
@@ -26,7 +26,7 @@ abstract class Visitor implements VisitorInterface
     /**
      * {@inheritdoc}
      */
-    public function visit(BaseMenuPart $menuPart): void
+    public function visit(MenuPart $menuPart): void
     {
         if ($menuPart instanceof Menu) {
             $this->visitMenu($menuPart);

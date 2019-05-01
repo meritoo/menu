@@ -8,13 +8,13 @@
 
 declare(strict_types=1);
 
-namespace Meritoo\Test\Menu\Base\BaseMenuPart;
+namespace Meritoo\Test\Menu\Base\MenuPart;
 
 use Meritoo\Common\Collection\Templates;
-use Meritoo\Menu\Base\BaseMenuPart;
+use Meritoo\Menu\MenuPart;
 
 /**
- * Part of menu used by test case of \Meritoo\Menu\Base\BaseMenuPart
+ * Part of menu used by test case of \Meritoo\Menu\Base\MenuPart
  *
  * @author    Meritoo <github@meritoo.pl>
  * @copyright Meritoo <http://www.meritoo.pl>
@@ -22,7 +22,7 @@ use Meritoo\Menu\Base\BaseMenuPart;
  * @internal
  * @coversNothing
  */
-class MySecondMenuPart extends BaseMenuPart
+class MySecondMenuPart extends MenuPart
 {
     /**
      * @var string

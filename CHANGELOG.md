@@ -7,6 +7,7 @@ Build navigation easily, without any efforts. Library that provides tools to bui
 1. Rename `Item` class to `LinkContainer`
 2. Visitor for menu part. Allows to run functionality outside the menu part, e.g. to make modifications.
 3. Move and rename class: `BaseVisitor` -> `Visitor` (`Meritoo\Menu\Base` -> `Meritoo\Menu\Visitor`)
+4. Move and rename class: `BaseMenuPart` -> `MenuPart` (`Meritoo\Menu\Base` -> `Meritoo\Menu`)
 
 # 0.0.1
 
