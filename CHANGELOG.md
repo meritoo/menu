@@ -2,6 +2,10 @@
 
 Build navigation easily, without any efforts. Library that provides tools to build a menu.
 
+# 0.0.3
+
+1. Readme > review and fix "unknown" badges
+
 # 0.0.2
 
 1. Rename `Item` class to `LinkContainer`

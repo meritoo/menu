@@ -2,7 +2,12 @@
 
 Build navigation easily, without any efforts. Library that provides tools to build a menu.
 
-![PHP from Packagist](https://img.shields.io/packagist/php-v/meritoo/menu.svg) [![Travis](https://img.shields.io/travis/rust-lang/rust.svg?style=flat-square)](https://travis-ci.org/meritoo/menu) [![Packagist](https://img.shields.io/packagist/v/meritoo/menu.svg?style=flat-square)](https://packagist.org/packages/meritoo/menu) [![license](https://img.shields.io/github/license/meritoo/menu.svg?style=flat-square)](https://github.com/meritoo/menu) [![GitHub commits](https://img.shields.io/github/commits-since/meritoo/menu/0.0.1.svg?style=flat-square)](https://github.com/meritoo/menu) [![Coverage Status](https://coveralls.io/repos/github/meritoo/menu/badge.svg?branch=master)](https://coveralls.io/github/meritoo/menu?branch=master)
+[![PHP Version](https://img.shields.io/badge/php-%5E7.2-blue.svg?style=flat-square)](https://img.shields.io/badge/php-%5E7.2-blue.svg)
+[![Build Status](https://travis-ci.com/meritoo/menu.svg?style=flat-square&branch=master)](https://travis-ci.com/meritoo/menu)
+[![Packagist](https://img.shields.io/packagist/v/meritoo/menu.svg?style=flat-square)](https://packagist.org/packages/meritoo/menu)
+[![license](https://img.shields.io/github/license/meritoo/menu.svg?style=flat-square)](https://github.com/meritoo/menu)
+[![GitHub commits](https://img.shields.io/github/commits-since/meritoo/menu/0.0.1.svg?style=flat-square)](https://github.com/meritoo/menu)
+[![Coverage Status](https://coveralls.io/repos/github/meritoo/menu/badge.svg?style=flat-square)](https://coveralls.io/github/meritoo/menu)
 
 # Installation
 
