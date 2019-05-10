@@ -50,7 +50,7 @@ class Attributes extends Collection
     /**
      * {@inheritdoc}
      */
-    public function addMultiple($attributes, $useIndexes = false): void
+    public function addMultiple($attributes, bool $useIndexes = false): void
     {
         $filtered = $this->removeEmptyNames($attributes);
 

@@ -2,6 +2,11 @@
 
 Build navigation easily, without any efforts. Library that provides tools to build a menu.
 
+# 0.0.4
+
+1. HTML attributes > fix "Declaration of Meritoo\Menu\Html\Attributes::addMultiple($attributes, $useIndexes = false):
+void must be compatible (...)" fatal error
+
 # 0.0.3
 
 1. Readme > review and fix "unknown" badges
