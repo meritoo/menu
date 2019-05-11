@@ -62,11 +62,12 @@ class Menu extends MenuPart
         $linksContainers = [];
 
         foreach ($links as $link) {
-            $name = $link[0] ?? '';
-            $url = $link[1] ?? '';
-
-            $linkAttributes = $link[2] ?? null;
-            $containerAttributes = $link[3] ?? null;
+            [
+                $name,
+                $url,
+                $linkAttributes,
+                $containerAttributes,
+            ] = static::getCreateLinkContainerArguments($link);
 
             $linksContainers[] = LinkContainer::create($name, $url, $linkAttributes, $containerAttributes);
         }
@@ -109,6 +110,23 @@ class Menu extends MenuPart
 
         return [
             'linksContainers' => $rendered,
+        ];
+    }
+
+    /**
+     * Returns arguments used to create container for a link
+     *
+     * @param array $link Data of link. Should contain 4 keys (0-indexed): name, url, link's attributes, container's
+     *                    attributes.
+     * @return array
+     */
+    private static function getCreateLinkContainerArguments(array $link): array
+    {
+        return [
+            $link[0] ?? '',
+            $link[1] ?? '',
+            $link[2] ?? null,
+            $link[3] ?? null,
         ];
     }
 

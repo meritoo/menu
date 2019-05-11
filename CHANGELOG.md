@@ -2,6 +2,10 @@
 
 Build navigation easily, without any efforts. Library that provides tools to build a menu.
 
+# 0.0.5
+
+1. Minor refactoring
+
 # 0.0.4
 
 1. HTML attributes > fix "Declaration of Meritoo\Menu\Html\Attributes::addMultiple($attributes, $useIndexes = false):
