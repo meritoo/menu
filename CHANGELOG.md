@@ -5,6 +5,7 @@ Build navigation easily, without any efforts. Library that provides tools to bui
 # 0.0.5
 
 1. Minor refactoring
+2. Menu, Link & LinkContainer > add getters (to get content)
 
 # 0.0.4
 

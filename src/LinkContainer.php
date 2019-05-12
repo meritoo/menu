@@ -45,6 +45,16 @@ class LinkContainer extends MenuPart
     }
 
     /**
+     * Returns container's link
+     *
+     * @return Link
+     */
+    public function getLink(): Link
+    {
+        return $this->link;
+    }
+
+    /**
      * Creates new container for a link
      *
      * @param string     $linkName            Name of container's link

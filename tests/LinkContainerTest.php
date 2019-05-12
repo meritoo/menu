@@ -229,6 +229,18 @@ class LinkContainerTest extends BaseTestCase
         static::assertEquals($expected, $linkContainer, $description);
     }
 
+    /**
+     * @param string        $description Description of test
+     * @param LinkContainer $container   Container for a link
+     * @param Link          $expected    Expected link
+     *
+     * @dataProvider provideContainerToGetLink
+     */
+    public function testGetLink(string $description, LinkContainer $container, Link $expected): void
+    {
+        static::assertEquals($expected, $container->getLink(), $description);
+    }
+
     public function provideDataToCreate(): ?Generator
     {
         $linkAttributes = [
@@ -302,6 +314,27 @@ class LinkContainerTest extends BaseTestCase
             '/test',
             $linkAttributes,
             $linkContainerAttributes,
+        ];
+    }
+
+    public function provideContainerToGetLink(): ?Generator
+    {
+        yield[
+            'An empty name and url of link',
+            new LinkContainer(new Link('', '')),
+            new Link('', ''),
+        ];
+
+        yield[
+            'Not empty name and empty url of link',
+            new LinkContainer(new Link('Test', '')),
+            new Link('Test', ''),
+        ];
+
+        yield[
+            'Container created using static method create()',
+            LinkContainer::create('Test', ''),
+            new Link('Test', ''),
         ];
     }
 }

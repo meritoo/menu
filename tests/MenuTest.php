@@ -44,6 +44,18 @@ class MenuTest extends BaseTestCase
         );
     }
 
+    /**
+     * @param string $description Description of test
+     * @param Menu   $menu        Menu to verify
+     * @param array  $expected    Expected containers with links
+     *
+     * @dataProvider provideMenuToGetLinksContainers
+     */
+    public function testGetLinksContainers(string $description, Menu $menu, array $expected): void
+    {
+        static::assertEquals($expected, $menu->getLinksContainers(), $description);
+    }
+
     public function testRenderWithoutLinksContainers(): void
     {
         $menu = new Menu([]);
@@ -534,6 +546,55 @@ class MenuTest extends BaseTestCase
                 ],
             ],
             $menu2Attributes,
+        ];
+    }
+
+    public function provideMenuToGetLinksContainers(): ?Generator
+    {
+        yield[
+            'No containers',
+            new Menu([]),
+            [],
+        ];
+
+        yield[
+            '1 container only',
+            new Menu([
+                new LinkContainer(new Link('', '')),
+            ]),
+            [
+                new LinkContainer(new Link('', '')),
+            ],
+        ];
+
+        yield[
+            '2 containers',
+            new Menu([
+                new LinkContainer(new Link('Test 1', '')),
+                new LinkContainer(new Link('Test 2', '/')),
+            ]),
+            [
+                new LinkContainer(new Link('Test 1', '')),
+                new LinkContainer(new Link('Test 2', '/')),
+            ],
+        ];
+
+        yield[
+            '2 containers - created by static method create()',
+            Menu::create([
+                [
+                    'Test 1',
+                    '',
+                ],
+                [
+                    'Test 2',
+                    '/',
+                ],
+            ]),
+            [
+                new LinkContainer(new Link('Test 1', '')),
+                new LinkContainer(new Link('Test 2', '/')),
+            ],
         ];
     }
 }

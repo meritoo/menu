@@ -45,6 +45,16 @@ class Menu extends MenuPart
     }
 
     /**
+     * Returns containers with links
+     *
+     * @return LinkContainer[]
+     */
+    public function getLinksContainers(): array
+    {
+        return $this->linksContainers;
+    }
+
+    /**
      * Creates new menu
      *
      * @param array      $links          An array of arrays (0-based indexes): [0] name of link, [1] url of link, [2]

@@ -47,6 +47,26 @@ class Link extends MenuPart
     }
 
     /**
+     * Returns name of link
+     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Returns url of link
+     *
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function render(Templates $templates): string

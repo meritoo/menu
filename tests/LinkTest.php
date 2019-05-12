@@ -124,6 +124,30 @@ class LinkTest extends BaseTestCase
         static::assertEquals($expected, $existing);
     }
 
+    /**
+     * @param string $description Description of test
+     * @param Link   $link        The link
+     * @param string $expected    Expected name
+     *
+     * @dataProvider provideLinkToGetName
+     */
+    public function testGetName(string $description, Link $link, string $expected): void
+    {
+        static::assertSame($expected, $link->getName(), $description);
+    }
+
+    /**
+     * @param string $description Description of test
+     * @param Link   $link        The link
+     * @param string $expected    Expected url
+     *
+     * @dataProvider provideLinkToGetUrl
+     */
+    public function testGetUrl(string $description, Link $link, string $expected): void
+    {
+        static::assertSame($expected, $link->getUrl(), $description);
+    }
+
     public function provideIncompleteTemplates(): ?Generator
     {
         $template = 'Template with \'%s\' index was not found. Did you provide all required templates?';
@@ -191,6 +215,48 @@ class LinkTest extends BaseTestCase
             ]),
             $link2,
             '<a href="/" id="main-link" data-position="12">Test 2</a>',
+        ];
+    }
+
+    public function provideLinkToGetName(): ?Generator
+    {
+        yield[
+            'An empty name and url',
+            new Link('', ''),
+            '',
+        ];
+
+        yield[
+            'Not empty name and empty url',
+            new Link('Test', ''),
+            'Test',
+        ];
+
+        yield[
+            'Not empty name and not empty url',
+            new Link('Test', '/'),
+            'Test',
+        ];
+    }
+
+    public function provideLinkToGetUrl(): ?Generator
+    {
+        yield[
+            'An empty name and url',
+            new Link('', ''),
+            '',
+        ];
+
+        yield[
+            'Not empty name and empty url',
+            new Link('Test', ''),
+            '',
+        ];
+
+        yield[
+            'Not empty name and not empty url',
+            new Link('Test', '/'),
+            '/',
         ];
     }
 }
