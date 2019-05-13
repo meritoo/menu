@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Meritoo\Menu;
 
 use Meritoo\Common\Collection\Templates;
+use Meritoo\Common\Utilities\Arrays;
 
 /**
  * Menu. Has containers with links.
@@ -52,6 +53,30 @@ class Menu extends MenuPart
     public function getLinksContainers(): array
     {
         return $this->linksContainers;
+    }
+
+    /**
+     * Returns all menu parts (menu, containers with links and links)
+     *
+     * @return MenuPart[]
+     */
+    public function getAllMenuParts(): array
+    {
+        $links = [];
+
+        foreach ($this->linksContainers as $container) {
+            $links[] = $container->getLink();
+        }
+
+        $result = array_merge(
+            [
+                $this,
+            ],
+            $this->linksContainers,
+            $links
+        );
+
+        return Arrays::getNonEmptyValues($result);
     }
 
     /**

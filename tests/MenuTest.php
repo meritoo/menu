@@ -56,6 +56,18 @@ class MenuTest extends BaseTestCase
         static::assertEquals($expected, $menu->getLinksContainers(), $description);
     }
 
+    /**
+     * @param string $description Description of test
+     * @param Menu   $menu        Menu to verify
+     * @param array  $expected    Expected menu parts
+     *
+     * @dataProvider provideMenuToGetAllMenuParts
+     */
+    public function testGetAllMenuParts(string $description, Menu $menu, array $expected): void
+    {
+        static::assertEquals($expected, $menu->getAllMenuParts(), $description);
+    }
+
     public function testRenderWithoutLinksContainers(): void
     {
         $menu = new Menu([]);
@@ -594,6 +606,73 @@ class MenuTest extends BaseTestCase
             [
                 new LinkContainer(new Link('Test 1', '')),
                 new LinkContainer(new Link('Test 2', '/')),
+            ],
+        ];
+    }
+
+    public function provideMenuToGetAllMenuParts(): ?Generator
+    {
+        yield[
+            'No menu parts',
+            new Menu([]),
+            [
+                new Menu([]),
+            ],
+        ];
+
+        yield[
+            '1 container only',
+            new Menu([
+                new LinkContainer(new Link('', '')),
+            ]),
+            [
+                new Menu([
+                    new LinkContainer(new Link('', '')),
+                ]),
+                new LinkContainer(new Link('', '')),
+                new Link('', ''),
+            ],
+        ];
+
+        yield[
+            '2 containers',
+            new Menu([
+                new LinkContainer(new Link('Test 1', '')),
+                new LinkContainer(new Link('Test 2', '/')),
+            ]),
+            [
+                new Menu([
+                    new LinkContainer(new Link('Test 1', '')),
+                    new LinkContainer(new Link('Test 2', '/')),
+                ]),
+                new LinkContainer(new Link('Test 1', '')),
+                new LinkContainer(new Link('Test 2', '/')),
+                new Link('Test 1', ''),
+                new Link('Test 2', '/'),
+            ],
+        ];
+
+        yield[
+            '2 containers - created by static method create()',
+            Menu::create([
+                [
+                    'Test 1',
+                    '',
+                ],
+                [
+                    'Test 2',
+                    '/',
+                ],
+            ]),
+            [
+                new Menu([
+                    new LinkContainer(new Link('Test 1', '')),
+                    new LinkContainer(new Link('Test 2', '/')),
+                ]),
+                new LinkContainer(new Link('Test 1', '')),
+                new LinkContainer(new Link('Test 2', '/')),
+                new Link('Test 1', ''),
+                new Link('Test 2', '/'),
             ],
         ];
     }

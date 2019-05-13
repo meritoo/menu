@@ -6,6 +6,7 @@ Build navigation easily, without any efforts. Library that provides tools to bui
 
 1. Minor refactoring
 2. Menu, Link & LinkContainer > add getters (to get content)
+3. Menu::getAllMenuParts() method > returns all menu parts (menu, containers with links and links)
 
 # 0.0.4
 
