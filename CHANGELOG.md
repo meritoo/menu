@@ -7,6 +7,9 @@ Build navigation easily, without any efforts. Library that provides tools to bui
 1. Minor refactoring
 2. Menu, Link & LinkContainer > add getters (to get content)
 3. Menu::getAllMenuParts() method > returns all menu parts (menu, containers with links and links)
+4. Docker > use images (instead of Dockerfiles)
+5. composer > squizlabs/php_codesniffer package > use ^3.4 (instead of ^2.9)
+6. Update Kernel used by tests
 
 # 0.0.4
 
